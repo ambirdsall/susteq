@@ -7,6 +7,5 @@ class Admin::OperationsController < ApplicationController
     @total_water = dispensed_by_pump_for_all_table(true)
     @shopkeepers_credit = credits_remaining_by_kiosk_table
     @credits_bought = credits_bought_by_kiosk(true)
-    # @error_codes = errors_by_hub
   end
 end
