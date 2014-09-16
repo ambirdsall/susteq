@@ -156,13 +156,13 @@ module PerspectiveSummary
     credits_other = Transaction.select("location_id, sum(amount) as total").where("transaction_code = 22 and ((starting_credits - ending_credits) < 0)").group("location_id")
     #Prepare data
     totals_hash = {}
-    credits_init.sort_by(&:location_id).each do |obj|
+    sort_by_location_id(credits_init).each do |obj|
       totals_hash[obj.location_id.to_s.to_sym] = obj.total
     end
     credits_other.each do |obj|
       totals_hash[obj.location_id.to_s.to_sym] += obj.total
     end
-    data = totals_hash.sort.map do |location_id,total|
+    data = totals_hash.map do |location_id,total|
       {label: location_id, value: total}
     end
 
