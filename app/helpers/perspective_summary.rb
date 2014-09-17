@@ -84,6 +84,7 @@ module PerspectiveSummary
   end
 
   def credits_by_kiosk_for_provider(provider)
+    return nil if provider.kiosks.empty?
     chart_data_array = []
     #Query for Bar Chart and Table
     kiosk_total_obj_arr = Transaction.select("location_id, sum(amount) AS total").where("transaction_code IN (20,21) AND location_id IN (#{provider_kiosk_locations_id(provider)})").group("location_id").order("total")
@@ -112,7 +113,6 @@ module PerspectiveSummary
   #WATER DISPENSED
   def dispensed_by_pump_for_all_table(table=true)
     pump_totals = Transaction.select("location_id, sum(amount) as total").where("transaction_code = 1").group("location_id").order("sum(amount)")
-    p sort_by_location_id(pump_totals)
     data = sort_by_location_id(pump_totals).map do |obj|
       {label: obj.location_id.to_s, value: obj.total}
     end
@@ -125,6 +125,7 @@ module PerspectiveSummary
   end
 
   def dispensed_by_pump_for_provider(provider)
+    return nil if provider.pumps.empty?
     #Query for Bar Chart and Table
     pump_total = Transaction.select("location_id, sum(amount) as total").where("transaction_code = 1 AND location_id in (#{provider_pump_locations_id(provider)}) AND extract(month from transaction_time) IN (#{last_six_months})").group("location_id").order("sum(amount)")
     data = pump_total.map do |transaction|
@@ -273,6 +274,7 @@ module PerspectiveSummary
   end
 
   def errors_by_hub_chart
+    return nil if Transaction.all.empty?
     #Get array of all location ids
     location_ids = Transaction.all.map{|t| t.location_id}.uniq!
 
