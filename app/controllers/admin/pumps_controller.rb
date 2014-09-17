@@ -10,7 +10,7 @@ class Admin::PumpsController < ApplicationController
 
   def show
     @pump = Pump.find params[:id]
-    js :viz_data => [dispensed_by_month(@pump), getHubs]
+    @viz_data = [dispensed_by_month(@pump), getHubs]
   end
 
   def create
@@ -36,7 +36,7 @@ class Admin::PumpsController < ApplicationController
 
   def index
     @pumps = Pump.all
-    js :viz_data => [dispensed_by_pump_for_all_table(false), getHubs]
+    @viz_data = [dispensed_by_pump_for_all_table(false), getHubs]
   end
 
   def edit

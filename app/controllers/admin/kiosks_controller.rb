@@ -10,12 +10,12 @@ class Admin::KiosksController < ApplicationController
 
   def index
     @kiosks = Kiosk.all
-    js :viz_data =>[credits_by_kiosk_for_all, getHubs]
+    @viz_data = [credits_by_kiosk_for_all, getHubs]
   end
 
   def show
     @kiosk = Kiosk.find params[:id]
-    js :viz_data => [credits_by_month(@kiosk)]
+    @viz_data = [credits_by_month(@kiosk)]
   end
 
   def create
