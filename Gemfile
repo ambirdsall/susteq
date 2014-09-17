@@ -16,7 +16,6 @@ gem 'haml'
 gem 'haml-rails'
 gem 'tzinfo-data', platforms: [:mingw, :mswin]
 gem 'bcrypt', '~> 3.1.7'
-gem 'paloma'
 
 group :development, :test do
   gem 'rspec-rails'

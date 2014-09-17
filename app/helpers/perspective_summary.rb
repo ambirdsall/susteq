@@ -6,11 +6,11 @@ module PerspectiveSummary
     months[month_number-1]
   end
 
-  def last_five_months
+  def last_six_months
     (Date.today.month-5..Date.today.month).to_a.join(", ")
   end
 
-  def last_five_months_array
+  def last_six_months_array
     (Date.today.month-5..Date.today.month)
   end
 
@@ -19,6 +19,10 @@ module PerspectiveSummary
   end
   def provider_pump_locations_id(provider)
     provider.pumps.map(&:location_id).join(",")
+  end
+
+  def sort_by_location_id(collection)
+    collection.sort_by{|item| item.location_id.to_i}
   end
 
   #CREDITS SOLD
@@ -34,11 +38,11 @@ module PerspectiveSummary
 
   def credits_by_kiosk_by_month
     #Query for Stacked Bar Chart
-    total_credits_by_kiosk_by_month = Transaction.select("location_id, sum(amount) as total,extract(month from transaction_time) as month").where("transaction_code in (20, 21) AND extract(month from transaction_time) IN (#{last_five_months})").group("extract(month from transaction_time),location_id")
+    total_credits_by_kiosk_by_month = Transaction.select("location_id, sum(amount) as total,extract(month from transaction_time) as month").where("transaction_code in (20, 21) AND extract(month from transaction_time) IN (#{last_six_months})").group("extract(month from transaction_time),location_id")
     kiosk_location_array = total_credits_by_kiosk_by_month.map{ |obj| obj.location_id}.uniq.sort
     stacked_data = kiosk_location_array.map do |kiosk_id|
       transactions = total_credits_by_kiosk_by_month.select{|obj| obj.location_id == kiosk_id }
-      values = last_five_months_array.map do |month|
+      values = last_six_months_array.map do |month|
         if transaction = transactions.find{|transaction| transaction.month == month}
           {x: getMonthName(month), y:transaction.total}
         else
@@ -52,11 +56,11 @@ module PerspectiveSummary
 
   def dispensed_by_pump_by_month
     #Query for Stacked Bar Chart
-    total_dispensed = Transaction.select("location_id, sum(amount) as total,extract(month from transaction_time) as month").where("transaction_code = 1 AND extract(month from transaction_time) IN (#{last_five_months})" ).group("extract(month from transaction_time),location_id")
+    total_dispensed = Transaction.select("location_id, sum(amount) as total,extract(month from transaction_time) as month").where("transaction_code = 1 AND extract(month from transaction_time) IN (#{last_six_months})" ).group("extract(month from transaction_time),location_id")
     pump_location_array = total_dispensed.map{ |obj| obj.location_id}.uniq.sort
     stacked_data = pump_location_array.map do |pump_id|
       transactions = total_dispensed.select{|obj| obj.location_id == pump_id }
-      values = last_five_months_array.map do |month|
+      values = last_six_months_array.map do |month|
         if transaction = transactions.find{|transaction| transaction.month == month}
           {x: getMonthName(month), y:transaction.total}
         else
@@ -80,6 +84,7 @@ module PerspectiveSummary
   end
 
   def credits_by_kiosk_for_provider(provider)
+    return nil if provider.kiosks.empty?
     chart_data_array = []
     #Query for Bar Chart and Table
     kiosk_total_obj_arr = Transaction.select("location_id, sum(amount) AS total").where("transaction_code IN (20,21) AND location_id IN (#{provider_kiosk_locations_id(provider)})").group("location_id").order("total")
@@ -92,9 +97,9 @@ module PerspectiveSummary
 
   def credits_by_month(kiosk)
     #Query db
-    sold_by_month = Transaction.select("sum(amount) as total,extract(month from transaction_time) as month").where("transaction_code IN (20,21) AND location_id = #{kiosk.location_id} AND extract(month from transaction_time) IN (#{last_five_months})").group("extract(month from transaction_time)")
+    sold_by_month = Transaction.select("sum(amount) as total,extract(month from transaction_time) as month").where("transaction_code IN (20,21) AND location_id = #{kiosk.location_id} AND extract(month from transaction_time) IN (#{last_six_months})").group("extract(month from transaction_time)")
     #Prepare data
-    data = last_five_months_array.map do |month|
+    data = last_six_months_array.map do |month|
       if transaction = sold_by_month.find{|obj| obj.month == month }
         {label: getMonthName(month), value: transaction.total}
       else
@@ -106,20 +111,23 @@ module PerspectiveSummary
   end
 
   #WATER DISPENSED
-  def dispensed_by_pump_for_all_table
-    chart_data_array = []
-    #Query for Bar Chart and Table
-    pump_total_obj_arr = Transaction.select("location_id, sum(amount) as total").where("transaction_code = 1").group("location_id").order("sum(amount)")
-    #Prepare data for Normalchart
-    pump_total_obj_arr.each do |obj|
-      chart_data_array.push({label: obj.location_id.to_s, value: obj.total})
+  def dispensed_by_pump_for_all_table(table=true)
+    pump_totals = Transaction.select("location_id, sum(amount) as total").where("transaction_code = 1").group("location_id").order("sum(amount)")
+    data = sort_by_location_id(pump_totals).map do |obj|
+      {label: obj.location_id.to_s, value: obj.total}
     end
-    data_to_display = { yAxisTitle: "Liters of Waters Dispensed Per Pump", xAxisLabel: "Location id", chartData: [{key:"Liters of Water Dispensed" , values: chart_data_array}], chartType: "bar"};
+
+    if table
+      data
+    else
+      data_to_display = { yAxisTitle: "Liters of Waters Dispensed Per Pump", xAxisLabel: "Location id", chartData: [{values:data}], chartType: "bar"};
+    end
   end
 
   def dispensed_by_pump_for_provider(provider)
+    return nil if provider.pumps.empty?
     #Query for Bar Chart and Table
-    pump_total = Transaction.select("location_id, sum(amount) as total").where("transaction_code = 1 AND location_id in (#{provider_pump_locations_id(provider)}) AND extract(month from transaction_time) IN (#{last_five_months})").group("location_id").order("sum(amount)")
+    pump_total = Transaction.select("location_id, sum(amount) as total").where("transaction_code = 1 AND location_id in (#{provider_pump_locations_id(provider)}) AND extract(month from transaction_time) IN (#{last_six_months})").group("location_id").order("sum(amount)")
     data = pump_total.map do |transaction|
       {label: transaction.location_id.to_s, value: transaction.total}
     end
@@ -129,9 +137,9 @@ module PerspectiveSummary
 
   def dispensed_by_month(pump)
     #Query db
-    dispensed_by_month = Transaction.select("sum(amount) as total,extract(month from transaction_time) as month").where("transaction_code = 1 AND location_id = #{pump.location_id} AND extract(month from transaction_time) IN (#{last_five_months})").group("extract(month from transaction_time)")
+    dispensed_by_month = Transaction.select("sum(amount) as total,extract(month from transaction_time) as month").where("transaction_code = 1 AND location_id = #{pump.location_id} AND extract(month from transaction_time) IN (#{last_six_months})").group("extract(month from transaction_time)")
     #Prepare data
-    data = last_five_months_array.map do |month|
+    data = last_six_months_array.map do |month|
       if transaction = dispensed_by_month.find{|obj| obj.month == month }
         {label: getMonthName(month), value: transaction.total}
       else
@@ -143,13 +151,13 @@ module PerspectiveSummary
   end
 
   #CREDITS BOUGHT BY KIOSK
-  def credits_bought_by_kiosk
+  def credits_bought_by_kiosk(table=false)
     #Query db
     credits_init = Transaction.select("location_id, sum(amount) as total").where("transaction_code = 23").group("location_id")
     credits_other = Transaction.select("location_id, sum(amount) as total").where("transaction_code = 22 and ((starting_credits - ending_credits) < 0)").group("location_id")
     #Prepare data
     totals_hash = {}
-    credits_init.sort_by(&:location_id).each do |obj|
+    sort_by_location_id(credits_init).each do |obj|
       totals_hash[obj.location_id.to_s.to_sym] = obj.total
     end
     credits_other.each do |obj|
@@ -158,30 +166,16 @@ module PerspectiveSummary
     data = totals_hash.map do |location_id,total|
       {label: location_id, value: total}
     end
+
     #Create json chart obj
-    data_to_display = { xAxisLabel: "Kiosk Location Id", yAxisTitle: "Credits Bought", chartData:[{values:data}], chartType: "bar"};
+    if table
+      data
+    else
+      data_to_display = { xAxisLabel: "Kiosk Location Id", yAxisTitle: "Credits Bought", chartData:[{values:data}], chartType: "bar"};
+    end
   end
 
-  def credits_bought_by_kiosk_table
-  #Query db
-    credits_init = Transaction.select("location_id, sum(amount) as total").where("transaction_code = 23").group("location_id")
-    credits_other = Transaction.select("location_id, sum(amount) as total").where("transaction_code = 22 and ((starting_credits - ending_credits) < 0)").group("location_id")
-    #Prepare data
-    chart_data_array = []
-    totals_hash = {}
-    credits_init.each do |obj|
-      totals_hash[obj.location_id.to_s.to_sym] = obj.total
-    end
-    credits_other.each do |obj|
-      totals_hash[obj.location_id.to_s.to_sym] += obj.total
-    end
-    totals_hash.each {|location_id,total|
-      chart_data_array.push({location_id: location_id, total: total})
-    }
-    return chart_data_array
-  end
-
-  def credits_remaining_by_kiosk
+  def credits_remaining_by_kiosk(table=false)
     #Query db
     credits_init = Transaction.select("location_id, sum(amount) as total").where("transaction_code = 23").group("location_id")
     credits_subtract = Transaction.select("location_id, sum(amount) as total").where("transaction_code = 22 and ((starting_credits - ending_credits) > 0)").group("location_id")
@@ -197,7 +191,11 @@ module PerspectiveSummary
      {label: location_id, value: total}
     end
     #Create json chart obj
-    data_to_display = { xAxisLabel: "Kiosk Location Id", yAxisTitle: "Credits Remaining", chartData:[{values:data}], chartType: "bar"};
+    if table
+      data
+    else
+      data_to_display = { xAxisLabel: "Kiosk Location Id", yAxisTitle: "Credits Remaining", chartData:[{values:data}], chartType: "bar"};
+    end
   end
 
 
@@ -209,7 +207,7 @@ module PerspectiveSummary
     chart_data_array = []
     totals_hash = {}
     date_hash = {}
-    credits_init.each do |obj|
+    sort_by_location_id(credits_init).each do |obj|
       totals_hash[obj.location_id.to_s.to_sym] = obj.total
       date_hash[obj.location_id.to_s.to_sym] = obj.date.strftime('%b %d, %Y')
     end
@@ -220,9 +218,9 @@ module PerspectiveSummary
       end
     end
     totals_hash.each {|location_id,total|
-      chart_data_array.push({location_id: location_id, total: total, date: date_hash[location_id.to_s.to_sym]})
+      chart_data_array.push({label: location_id, value: total, date: date_hash[location_id.to_s.to_sym]})
     }
-    return chart_data_array
+    chart_data_array
   end
 
   def sms_balance_by_pump
@@ -276,6 +274,7 @@ module PerspectiveSummary
   end
 
   def errors_by_hub_chart
+    return nil if Transaction.all.empty?
     #Get array of all location ids
     location_ids = Transaction.all.map{|t| t.location_id}.uniq!
 
