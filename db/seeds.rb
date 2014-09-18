@@ -310,3 +310,12 @@ end
       amount: (50..200).to_a.sample
     )
 end
+
+  Transaction.create!(
+    transaction_time: generate_date_from_last_six_months,
+    transaction_code: 23,
+    location_id: 100,
+    amount: 4,
+    starting_credits: 10,
+    ending_credits: 5
+  )

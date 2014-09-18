@@ -30,7 +30,12 @@ class Hub < ActiveRecord::Base
     hubs.map{ |hub| hub.get_with_transactions }
   end
 
-  def self.get_all_transactions
-    all.map{ |hub| hub.transactions }.flatten
+  def self.type_of_hub(id)
+    Transaction.find_by(location_id: id).transaction_code == 1 ? "Pump" : "Kiosk"
+  end
+
+  def self.get_new_hubs
+    new_hubs_ids = Transaction.all.map{|transaction| transaction.location_id}.uniq - Hub.all.map{|hub| hub.location_id}.uniq
+    new_hubs_ids.map{|location_id| {id: location_id, type: Hub.type_of_hub(location_id)}}
   end
 end
