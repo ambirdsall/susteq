@@ -2,25 +2,25 @@
   %h1.page-header Susteq Dashboard
 
 .col-lg-12
-  %h3 SMS low
+  .panel.panel-default.mt20
+    .panel-heading
+    .panel-body
+      #chart-container
+.col-lg-12
+  %h3 SMS Credits Remaining by Kiosk
   .table-responsive
     %table#dataTables-example.table.table-striped.table-bordered.table-hover.mt20
       %thead
         %tr
-          %th Hub
-          %th request date
-          %th Amount
+          %th Kiosk
+          %th As Of
+          %th Credits
       %tbody
         - @sms.each do |sms|
           %tr
             %td= sms[:location_id]
             %td= sms[:date]
             %td= sms[:total]
-.col-lg-12
-  .panel.panel-default.mt20
-    .panel-heading
-    .panel-body
-      #chart-container
 .col-lg-12
   %h3 Total Water
   .table-responsive
@@ -35,32 +35,17 @@
             %td= hub[:location_id]
             %td= hub[:total]
 .col-lg-12
-  %h3 Shopkeepers credit
-  .table-responsive
-    %table#dataTables-example.table.table-striped.table-bordered.table-hover
-      %thead
-        %tr
-          %th Hub
-          %th Date
-          %th Credits
-      %tbody
-        - @shopkeepers_credit.each do |hub|
-          %tr
-            %td= hub[:location_id]
-            %td= hub[:date]
-            %td= hub[:total]
-.col-lg-12
   .panel.panel-default
     .panel-heading
       %i.fa.fa-map-marker.fa-fw
-      Water pumps and kiosks
+      Water Points and Kiosks
       .pull-right
         .minimize.map-button
           %i.fa.fa-minus.fa-fw
     .panel-body#map
 
 
-- unless @new_hubs_ids.empty?
+- unless @new_hubs_hashes.empty?
   %h3 Hubs with the following location ids have not yet been added to the Hubs table:
   .table-responsive
     %table#dataTables-example.table.table-striped.table-bordered.table-hover
@@ -68,6 +53,6 @@
         %tr
           %th Hub
       %tbody
-        - @new_hubs_ids.each do |id|
+        - @new_hubs_hashes.each do |hub_hash|
           %tr
-            %td= link_to id, admin_add_new_hub_path(new_hubs_id: id)
+            %td= link_to "#{hub_hash[:type]} #{hub_hash[:id]}", admin_add_new_hub_path(id: hub_hash[:id], type: hub_hash[:type])
