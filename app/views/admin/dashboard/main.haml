@@ -1,6 +1,22 @@
 .col-lg-12
   %h1.page-header Susteq Dashboard
-
+  .panel.panel-default.mt20
+    .panel-heading
+    .panel-body
+      #chart-container
+.col-lg-12
+  %h3 Credits Bought by Kiosk
+  .table-responsive
+    %table#dataTables-example.table.table-striped.table-bordered.table-hover.mt20
+      %thead
+        %tr
+          %th Kiosk Location Id
+          %th Credits bought
+      %tbody
+        - @credits_bought.each do |kiosk|
+          %tr
+            %td= kiosk[:label]
+            %td= kiosk[:value]
 .col-lg-12
   .panel.panel-default.mt20
     .panel-heading
@@ -22,18 +38,18 @@
             %td= sms[:date]
             %td= sms[:total]
 .col-lg-12
-  %h3 Total Water
+  %h3 Total Water Dispensed by Water Point
   .table-responsive
     %table#dataTables-example.table.table-striped.table-bordered.table-hover
       %thead
         %tr
-          %th Layer
-          %th Credits
+          %th Water Point
+          %th Litres
       %tbody
         - @total_water.each do |hub|
           %tr
-            %td= hub[:location_id]
-            %td= hub[:total]
+            %td= hub[:label]
+            %td= hub[:value]
 .col-lg-12
   .panel.panel-default
     .panel-heading

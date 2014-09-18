@@ -56,3 +56,6 @@
               =render partial: "admin/dashboard/side_menu"
       #page-wrapper
         =yield
+    - if @viz_data
+      :javascript
+        BigData.viz_data = #{@viz_data.to_json};
