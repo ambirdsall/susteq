@@ -6,12 +6,11 @@
 			- flash[:error_messages].each do |msg|
 				%li{:style => "font-weight:bold;color:red;"}= msg
 	.form-group
-		= f.label :type
-		= f.select :type, ["Kiosk", "Pump"], {prompt: "Select hub type"}, {class: "form-control"}
+		= f.select :type, ["Kiosk", "Pump"], {selected: params[:type]}, {class: "form-control"}
 	.form-group
 		= f.label :location_id
 		%br
-		= f.text_field :location_id, class: "form-control"
+		= f.text_field :location_id, class: "form-control", value: params[:id]
 	.form-group
 		= f.label :name
 		%br
