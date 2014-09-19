@@ -10,7 +10,7 @@ DevBootcamp Mule Deer 2014 Final Project
 The first page you will see upon logging in, the dashboard contains a useful overview of graphs for all hubs in your system. If you'd like to minimize the map, just click on the minus sign on its upper-right corner.
 
 ####Operations
-The bottom link in the sidebar contains tables of information for all kiosks and water points, including sales, litres of water dispensed, and error codes. Each table is searchable, should you want to find information for a subset of your data.
+The bottom link in the sidebar contains tables of information for all kiosks and water points, including sales, liters of water dispensed, and error codes. Each table is searchable, should you want to find information for a subset of your data.
 
 ####Providers, Kiosks, and Water Points
 Each of these links on the sidebar takes you to a page containing summary graphs and a table of all items of that type. Each entry in the table is a link to an individual summary page, with more detailed information about that particular Provider, Kiosk, or Water Point.
