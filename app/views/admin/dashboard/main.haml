@@ -16,14 +16,10 @@
       Water Kiosk & Point Charts
     .panel-body
       #chart-container
-- unless @new_hubs_hashes.empty?
-  %h3 Hubs with the following location ids have not yet been added to the Hubs table:
-  .table-responsive
-    %table.dataTables-example.table.table-striped.table-bordered.table-hover
-      %thead
-        %tr
-          %th Hub
-      %tbody
-        - @new_hubs_hashes.each do |hub_hash|
-          %tr
-            %td= link_to "#{hub_hash[:type]} #{hub_hash[:id]}", admin_add_new_hub_path(id: hub_hash[:id], type: hub_hash[:type])
+
+:javascript
+  $('#new-hub-alert').hide()
+  $('.check-for-new-hubs').on('click',function() {
+    console.log("inside listener")
+    $('#new-hub-alert').show();
+  })

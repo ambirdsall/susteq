@@ -9,6 +9,11 @@
 @import "font-awesome.min";
 @import "nv.d3";
 
+#new-hub-alert {
+  display: none;
+  color: red;
+}
+
 .form-signin {
   max-width: 330px;
   padding: 15px;
