@@ -21,6 +21,7 @@ Rails.application.routes.draw do
 
   #ROUTES FOR ADMIN DASHBOARD
   namespace :admin do
+    post '/transactions/new', to: 'transactions#create'
     resources :sessions, only: [:new, :create, :destroy]
     get '/', to: "sessions#new", as: 'signin'
     get '/add_hub', to: 'hubs#new', as: 'add_new_hub'
@@ -38,8 +39,6 @@ Rails.application.routes.draw do
     resources :providers do
       resources :pumps, :kiosks, :employees
     end
-    #ROUTES FOR AJAX REQUESTS
-    get "/credits_by_kiosk", to: "transactions#credits_by_kiosk"
   end
 
 end

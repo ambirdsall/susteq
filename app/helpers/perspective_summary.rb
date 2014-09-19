@@ -71,7 +71,7 @@ module PerspectiveSummary
       end
       data.push({label: provider.name, value: total})
     end
-    data_to_display = { yAxisTitle: "Credits Sold (by Kiosks of Each Provider)", xAxisLabel: "Provider", chartData: [{values:data}], chartType: "bar"};
+    data_to_display = { yAxisTitle: "Credits Sold (for Kiosks of each Provider)", xAxisLabel: "Provider", chartData: [{values:data}], chartType: "bar"};
   end
 
   #SPECIFIC PROVIDER PAGE
@@ -259,15 +259,15 @@ module PerspectiveSummary
   def errors_by_hub_table(table=true)
     return nil if Transaction.all.empty?
     #Get array of all location ids
-    location_ids = Transaction.all.map{|t| t.location_id}.uniq!
+    location_ids = Transaction.all.map{|t| t.location_id}.uniq.sort
     #Query db for given error by location
     gprs_errors = Transaction.select("location_id, count(amount) as count").where("transaction_code=39 AND amount=101").group("location_id")
     rfid_errors = Transaction.select("location_id, count(amount) as count").where("transaction_code=39 AND amount =111").group("location_id")
     bat_low_errors = Transaction.select("location_id, count(amount) as count").where("transaction_code=39 AND amount =132").group("location_id")
     bat_ok_errors = Transaction.select("location_id, count(amount) as count").where("transaction_code=39 AND amount =133").group("location_id")
     errors_hash = {"GPRS Errors" => gprs_errors, "RFID Errors" => rfid_errors, "Battery Low" => bat_low_errors, "Battery OK" => bat_ok_errors}
-    #Prepare data for chart
-    stacked_data = location_ids.map do |location_id|
+    #Prepare data for table
+    table_data = location_ids.map do |location_id|
       error_array = errors_hash.map do |name, errors|
         if error = errors.find {|object| object.location_id == location_id }
           {x: name, y: error.count}
@@ -275,12 +275,21 @@ module PerspectiveSummary
           {x:name, y:0}
         end
       end
-      {key: "Location Id #{location_id}", values: error_array}
+      {key: "#{location_id}", values: error_array}
     end
+    #Prepare data for chart
+    stacked_data = errors_hash.map do |error_type, errors|
+      error_array = location_ids.map do |location_id|
+        selected_errors = errors.select{ |transaction| transaction.location_id == location_id }
+        {x: "#{location_id}", y: selected_errors.count}
+      end
+      {key: error_type, values: error_array}
+    end
+
     if table
-      stacked_data
+      table_data
     else
-      data_to_display = {yAxisTitle: "Errors by Hub", chartData:stacked_data, chartType: "stacked"};
+      data_to_display = {yAxisTitle: "Errors by Hub", xAxisLabel:"Location Id", chartData:stacked_data, chartType: "stacked"};
     end
   end
 
@@ -296,5 +305,4 @@ module PerspectiveSummary
     {chartData: {kiosks: kiosks, pumps: pumps},
                   chartType: "map" }
   end
-
 end

@@ -1,0 +1,71 @@
+.form-signin {
+  max-width: 330px;
+  padding: 15px;
+  margin: 0 auto;
+}
+
+.mt5 {
+  margin-top: 5px;
+}
+
+.mt20 {
+  margin-top: 20px;
+}
+
+#page-wrapper {
+  padding-bottom: 80px;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.gen-info th, .gen-info td {
+  padding: 3px 3px 3px 0;
+}
+
+.gen-info {
+  margin-bottom: 20px;
+}
+
+.row {
+  padding-top: 20px;
+}
+
+h3 {
+  margin-bottom: 20px;
+}
+
+.minimize {
+  font-size: 15px;
+}
+
+.btn-add {
+  margin-top: -65px;
+}
+
+.active {
+  background-color: #eeeeee;
+}
+
+.dataTables_filter label {
+  float: right;
+  margin-left: 10px;
+}
+
+.dataTables_filter input {
+  margin-left: 10px;
+}
+
+.dataTables_paginate {
+  margin-top: -35px;
+  float: right;
+}
+
+.dataTables_info {
+  margin-top: -15;
+}
+
+.label-danger, .label-warning, .label-success {
+  width: 100px;
+}

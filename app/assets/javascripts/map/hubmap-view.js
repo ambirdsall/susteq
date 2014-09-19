@@ -53,15 +53,15 @@ HubMap.View.prototype = {
   },
 
   createPopUp: function(hub){
-    return L.popup().setContent('<p>'+ hub.name +'<br />' + hub.type +'.</p>');
+    return L.popup().setContent('<p>'+ hub.name +'<br />' + hub.type + '<br/> Location Id ' + hub.location_id +'</p>');
   },
 
   createErrorPopUp: function(hub){
-    return L.popup().setContent('<p>'+ hub.name +'<br />' + hub.type +'</p>');
+    return L.popup().setContent('<p>'+ hub.name +'<br />' + hub.type + '<br/> Location Id ' + hub.location_id +'</p>');
   },
 
   makePopUp: function(hub){
-    if (hub.status === 1)
+    if (hub.status_code === 1)
       return this.createPopUp(hub);
     else
       return this.createErrorPopUp(hub);

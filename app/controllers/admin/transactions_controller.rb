@@ -1,14 +1,20 @@
 class Admin::TransactionsController < ApplicationController
-  before_filter :require_admin_signin
+  def create
+    if params[:transactions]
+      params[:transactions].each do |transaction_data|
+        if hub = Hub.find_by(location_id:transaction_data[:location_id])
+          hub.transactions.create(transaction_params(transaction_data))
+        else
+          Transaction.create(transaction_params(transaction_data))
+        end
+      end
+    end
+    render text: "Thanks for sending a POST request. Payload: #{request.body.read}"
+  end
 
-  def credits_by_kiosk
-    kiosk_total_objects = Transaction.select("location_id as kiosk_id, sum(amount) as total").credits_sold.group("location_id").order("sum(amount)")
-    obj_arr = kiosk_total_objects.map do |obj|
-      p obj
-      {location_id: obj.kiosk_id, total: obj.total}
-    end
-    respond_to do |format|
-      format.json { render json: obj_arr }
-    end
+  private
+
+  def transaction_params(transaction_data)
+    transaction_data.permit(:rfid_id, :starting_credits, :ending_credits, :transaction_code, :amount, :error_code, :longitude, :latitude, :location_id, :provider_id, :transaction_time)
   end
 end
