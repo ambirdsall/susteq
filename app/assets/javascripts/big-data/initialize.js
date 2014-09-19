@@ -15,7 +15,6 @@ $(document).ready(function(){
   if ($('.check-for-new-hubs').length){
     $('#new-hub-alert').hide()
     $('.check-for-new-hubs').on('click',function(){
-      console.log("inside listener")
       $('#new-hub-alert').show();
     })
   }
