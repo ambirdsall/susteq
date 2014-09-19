@@ -9,6 +9,20 @@
         .minimize.map-button
           %i.fa.fa-minus.fa-fw
     .panel-body#map
+  %button.check-for-new-hubs.btn.btn-primary.btn-md.icon-check.pull-right
+    Check for New Hubs
+.col-lg-12
+  #new-hub-alert
+    - if @new_hubs_hashes.empty?
+      %h4 There are no new hubs to add.
+    - else
+      %h4 These unknown hubs have recorded transactions. Click to add them:
+      .table-responsive
+        %table.dataTables-example.table.table-striped.table-bordered.table-hover
+          %tbody
+            - @new_hubs_hashes.each do |hub_hash|
+              %tr
+                %td= link_to "#{hub_hash[:type]} #{hub_hash[:id]}", admin_add_new_hub_path(id: hub_hash[:id], type: hub_hash[:type])
 .col-lg-12
   .panel.panel-default.mt20
     .panel-heading

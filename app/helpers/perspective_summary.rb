@@ -234,100 +234,39 @@ module PerspectiveSummary
     end
   end
 
-  # def credits_remaining_by_kiosk_table
-  #   #Query db
-  #   credits_init = Transaction.select("location_id, sum(amount) as total, max(transaction_time) as date").where("transaction_code = 23").group("location_id")
-  #   credits_subtract = Transaction.select("location_id, sum(amount) as total, max(transaction_time) as date").where("transaction_code = 22 and ((starting_credits - ending_credits) > 0)").group("location_id")
-  #   #Prepare data
-  #   chart_data_array = []
-  #   totals_hash = {}
-  #   date_hash = {}
-  #   sort_by_location_id(credits_init).each do |obj|
-  #     totals_hash[obj.location_id.to_s.to_sym] = obj.total
-  #     date_hash[obj.location_id.to_s.to_sym] = obj.date.strftime('%b %d, %Y')
-  #   end
-  #   credits_subtract.each do |obj|
-  #     totals_hash[obj.location_id.to_s.to_sym] -= obj.total
-  #     if date_hash[obj.location_id.to_s.to_sym] < obj.date
-  #       date_hash[obj.location_id.to_s.to_sym] = obj.date.strftime('%b %d, %Y')
-  #     end
-  #   end
-  #   totals_hash.each {|location_id,total|
-  #     chart_data_array.push({label: location_id, value: total, date: date_hash[location_id.to_s.to_sym]})
-  #   }
-  #   chart_data_array
-  # end
-
+#********************************SMS BALANCE************************
   #DASHBOARD & OPERATIONS
   def sms_balance_by_pump_table(table=true)
-    chart_data_array = []
     sms_balance_by_location = Transaction.select("location_id, transaction_time as date, sum(amount) as total").where("transaction_code=41").group("location_id,transaction_time").order("transaction_time DESC")
+    data = []
     existing_ids = []
     sms_balance_by_location.each do |obj|
       if !existing_ids.include?(obj.location_id)
-      chart_data_array.push({location_id: obj.location_id, date: obj.date, total: obj.total})
+        data.push({label: obj.location_id, value: obj.total, date: obj.date.strftime('%b %d, %Y')})
         existing_ids.push(obj.location_id)
       else
         existing_ids.push(obj.location_id)
       end
     end
-
     if table
-      return chart_data_array
+      data
     else
-      data_to_display = { xAxisTitle: "Point Location ID", yAxisTitle: "SMS Remaining Credits (per Point)", chartData: chart_data_array, chartType: "bar", xKey:"kiosk" , yKey:"total"};
-      return data_to_display
+      data_to_display = { xAxisLabel: "Point Location ID", yAxisTitle: "SMS Remaining Credits (per Point)", chartData:[{values:data}], chartType: "bar"};
     end
   end
 
-
-  # def sms_balance_by_pump_table
-  #   chart_data_array = []
-  #   sms_balance_by_location = Transaction.select("location_id, transaction_time as date, sum(amount) as total").where("transaction_code=41").group("location_id,transaction_time").order("transaction_time DESC")
-  #   existing_ids = []
-  #   sms_balance_by_location.each do |obj|
-  #     if !existing_ids.include?(obj.location_id)
-  #     chart_data_array.push({location_id: obj.location_id, date: obj.date.strftime('%b %d, %Y'), total: obj.total})
-  #       existing_ids.push(obj.location_id)
-  #     else
-  #       existing_ids.push(obj.location_id)
-  #     end
-  #   end
-  #   return chart_data_array
-  # end
-
-  def last_error_by_hub
-    @gprs_errors_arr = []
-    existing_ids = []
-    gprs_errors = Transaction.select("location_id, transaction_time, count(amount) as count").where("transaction_code=39 AND amount =101 AND transaction_time > (Date.today - 30)").group("location_id").order("transaction_time")
-    gprs_errors.each do |error|
-      if !existing_ids.include?(obj.location_id)
-        @gprs_errors_arr.push({location_id: error.location_id, error_type: "gprs", count: error.count})
-      else
-        existing_ids.push(errror.location_id)
-      end
-    end
-    @bat_low_errors_arr = []
-    bat_low_errors = Transaction.select("location_id, transaction_time, count(amount) as count").where("transaction_code=39 AND amount =132 AND transaction_time > (Date.today - 30)").group("location_id")
-    bat_low_errors.each do |error|
-      @bat_low_errors_arr.push({location_id: error.location_id, error_type: "bat_low" , count: error.count})
-    end
-  end
-
-  def errors_by_hub_chart
+#*************************************ERRORS*******************************
+  def errors_by_hub_table(table=true)
     return nil if Transaction.all.empty?
     #Get array of all location ids
     location_ids = Transaction.all.map{|t| t.location_id}.uniq!
-
     #Query db for given error by location
     gprs_errors = Transaction.select("location_id, count(amount) as count").where("transaction_code=39 AND amount=101").group("location_id")
     rfid_errors = Transaction.select("location_id, count(amount) as count").where("transaction_code=39 AND amount =111").group("location_id")
     bat_low_errors = Transaction.select("location_id, count(amount) as count").where("transaction_code=39 AND amount =132").group("location_id")
     bat_ok_errors = Transaction.select("location_id, count(amount) as count").where("transaction_code=39 AND amount =133").group("location_id")
-
     errors_hash = {"GPRS Errors" => gprs_errors, "RFID Errors" => rfid_errors, "Battery Low" => bat_low_errors, "Battery OK" => bat_ok_errors}
-
-    #Loop through all locations
+    #Prepare data for chart
     stacked_data = location_ids.map do |location_id|
       error_array = errors_hash.map do |name, errors|
         if error = errors.find {|object| object.location_id == location_id }
@@ -338,9 +277,14 @@ module PerspectiveSummary
       end
       {key: "Location Id #{location_id}", values: error_array}
     end
-    data_to_display = {yAxisTitle: "Errors by Hub", chartData:stacked_data, chartType: "stacked"};
+    if table
+      stacked_data
+    else
+      data_to_display = {yAxisTitle: "Errors by Hub", chartData:stacked_data, chartType: "stacked"};
+    end
   end
 
+#*************************************MAP*******************************
   def getHubs
     if admin_signed_in?
       kiosks = Kiosk.all

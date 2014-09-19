@@ -1,9 +1,9 @@
 .col-lg-12
 	%h1.page-header
 		= @pump.name
-		%small - Pump
+		%small - Point
 .col-lg-12
-	%h3.pull-left General information
+	%h3.pull-left General Information
 	%p.pull-right.mt20
 		= link_to '<i class="fa fa-pencil fa-fw"></i>'.html_safe, edit_admin_pump_path(@pump)
 		= link_to '<i class="fa fa-trash fa-fw"></i>'.html_safe, admin_pump_path(@pump), method: :delete, data: { confirm: 'Are you sure?' }
@@ -11,17 +11,25 @@
 	%table.gen-info
 		%col.col-lg-5
 		%tr
-			%th Name
+			%th Point Name
 			%td= @pump.name
 		%tr
 			%th Location ID
 			%td= @pump.location_id
 		%tr
-			%th Type
-			%td= @pump.type
-		%tr
 			%th Provider
 			%td= link_to "#{@pump.provider.name}", admin_provider_path(id: @pump.provider_id)
+		%tr
+			%th Status Code
+			%td
+				.pull-left
+					- case @pump.status_code
+						- when -1
+							%span.label.label-danger Danger
+						- when 0
+							%span.label.label-warning Warning
+						- when 1
+							%span.label.label-success Ok
 .col-lg-6
 	%table.gen-info
 		%col.col-lg-5
@@ -35,50 +43,27 @@
 			%th Created at
 			%td= @pump.created_at
 		%tr
-			%th Updated at
+			%th Last Updated at
 			%td= @pump.updated_at
 .col-lg-12
 	.panel.panel-default.mt20
-		.panel-heading
-			Liters of Water Dispensed Per Pump
-			.pull-right
 		.panel-body
 			#chart-container
-.col-lg-12
-	%h3 Total transactions per month
-	.table-responsive
-		%table#dataTables-example.table.table-basic.table-bordered.table-hover.mt20
-			%thead
-				%tr
-					%th Month
-					%th Profit
-			%tbody
-				%tr.odd.gradeX
-					%td May
-					%td $ 23.835
-				%tr.even.gradeC
-					%td June
-					%td $ 32.142
 .row
 .col-lg-12
-	%h3 Latest transactions
+	%h3 Latest Transactions
 	.table-responsive
 		%table#dataTables-example.table.table-basic.table-bordered.table-hover.mt20
 			%thead
 				%tr
 					%th Transaction ID
-					%th Transaction code
-					%th Transaction amount
-					%th Transaction date
+					%th Transaction Code
+					%th Transaction Amount
+					%th Transaction Date
 			%tbody
 				- @pump.transactions.each do |t|
 					%tr
 						%td= t.id
 						%td= t.transaction_code
 						%td= t.amount
-						%td= t.transaction_time
-.row
-:javascript
-	$(document).ready(function() {
-			$('#dataTables-example').dataTable();
-	});
+						%td= t.transaction_time.strftime('%b %d, %Y')
