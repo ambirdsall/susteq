@@ -6,6 +6,7 @@ $(document).ready(function(){
   if ($('.dataTables-example').length){
     $('.dataTables-example').dataTable();
   }
-  //Recalculates background div styling
-  $('#page-wrapper').css('height', $('#page-wrapper').height()+ $('#chart-container').height())
+  setTimeout(function(){
+    $('#page-wrapper').height($('html').height())
+  }, 100);
 })
