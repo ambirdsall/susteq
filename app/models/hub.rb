@@ -18,18 +18,6 @@ class Hub < ActiveRecord::Base
     transactions << Transaction.where(location_id: location_id)
   end
 
-  def get_with_transactions
-    {hub: self, transactions: transactions}
-  end
-
-  def self.get_all_with_transactions
-    all.map{ |hub| hub.get_with_transactions }
-  end
-
-  def self.get_many_with_transaction(hubs)
-    hubs.map{ |hub| hub.get_with_transactions }
-  end
-
   def self.type_of_hub(id)
     Transaction.find_by(location_id: id).transaction_code == 1 ? "Pump" : "Kiosk"
   end

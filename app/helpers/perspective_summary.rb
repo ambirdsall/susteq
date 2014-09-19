@@ -293,6 +293,7 @@ module PerspectiveSummary
         {x: "#{location_id}", y: selected_errors.count}
       end
       {key: error_type, values: error_array}
+    end
     data_to_display = {yAxisTitle: "Errors by Hub", xAxisLabel:"Location Id", chartData:stacked_data, chartType: "stacked"};
   end
 
@@ -307,5 +308,4 @@ module PerspectiveSummary
     {chartData: {kiosks: kiosks, pumps: pumps},
                   chartType: "map" }
   end
-
 end

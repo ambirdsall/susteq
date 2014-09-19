@@ -38,8 +38,8 @@ Rails.application.routes.draw do
     resources :providers do
       resources :pumps, :kiosks, :employees
     end
-    #ROUTES FOR AJAX REQUESTS
-    get "/credits_by_kiosk", to: "transactions#credits_by_kiosk"
+
+    post "/transactions/new", to: "transactions#create"
   end
 
 end
