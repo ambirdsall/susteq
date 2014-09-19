@@ -16,10 +16,6 @@
 //= require sb-admin/jquery.metisMenu
 //= require sb-admin/jquery.dataTables
 //= require sb-admin/dataTables.bootstrap
-//= require sb-admin/jquery.flot
-//= require sb-admin/jquery.flot.pie
-//= require sb-admin/jquery.flot.resize
-//= require sb-admin/jquery.flot.tooltip.min
 //= require leaflet
 //= require esri-leaflet
 //= require leaflet.awesome-markers.min

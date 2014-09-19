@@ -19,13 +19,14 @@ HubChart.BarChart = function(object){
 HubChart.StackedBarChart = function(object){
   var chart = nv.models.multiBarChart()
     .transitionDuration(350)
-    .reduceXTicks(true)
+    .reduceXTicks(false)
     .rotateLabels(0)
     .showControls(true)
     .groupSpacing(0.1)
     .stacked(true)
   ;
 
+  chart.xAxis.axisLabel(object.xAxisLabel || null);
   chart.yAxis
     .tickFormat(d3.format(',.1f'));
 
