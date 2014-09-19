@@ -22,7 +22,7 @@
 			%td= link_to "#{@kiosk.provider.name}", admin_provider_path(id: @kiosk.provider_id)
 		%tr
 			%th Status Code
-			%td=
+			%td
 				.pull-left
 					- case @kiosk.status_code
 						- when -1
@@ -42,10 +42,10 @@
 			%td= @kiosk.latitude
 		%tr
 			%th Created at
-			%td= @kiosk.created_at
+			%td= @kiosk.created_at.strftime('%b %d, %Y')
 		%tr
 			%th Last Updated at
-			%td= @kiosk.updated_at
+			%td= @kiosk.updated_at.strftime('%b %d, %Y')
 .col-lg-12
 	.panel.panel-default.mt20
 		.panel-body

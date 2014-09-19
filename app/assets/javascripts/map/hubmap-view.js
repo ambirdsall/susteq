@@ -88,7 +88,7 @@ HubMap.View.prototype = {
   renderHubsOnMap: function(hubs){
     this.pumpsLayer = this.createHubLayers(hubs.pumps);
     this.kiosksLayer =  this.createHubLayers(hubs.kiosks);
-    L.control.layers(null, {"Kiosks":this.kiosksLayer, "Pumps":this.pumpsLayer}, {collapsed:false}).addTo(this.map);
+    L.control.layers(null, {"Kiosks":this.kiosksLayer, "Points":this.pumpsLayer}, {collapsed:false}).addTo(this.map);
   },
 
   displayHubs: function(hubs){

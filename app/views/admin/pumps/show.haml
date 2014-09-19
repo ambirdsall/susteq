@@ -41,10 +41,10 @@
 			%td= @pump.latitude
 		%tr
 			%th Created at
-			%td= @pump.created_at
+			%td= @pump.created_at.strftime('%b %d, %Y')
 		%tr
 			%th Last Updated at
-			%td= @pump.updated_at
+			%td= @pump.updated_at.strftime('%b %d, %Y')
 .col-lg-12
 	.panel.panel-default.mt20
 		.panel-body

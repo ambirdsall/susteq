@@ -4,7 +4,7 @@
 		= @kiosk.name
 		%small - Kiosk
 .col-lg-12
-	%h3.pull-left General information
+	%h3.pull-left General Information
 .col-lg-6
 	%table.gen-info
 		%col.col-lg-5
@@ -15,6 +15,17 @@
 		%tr
 			%th Location ID
 			%td= @kiosk.location_id
+		%tr
+			%th Status Code
+			%td
+				.pull-left
+					- case @kiosk.status_code
+						- when -1
+							%span.label.label-danger Danger
+						- when 0
+							%span.label.label-warning Warning
+						- when 1
+							%span.label.label-success Ok
 .col-lg-6
 	%table.gen-info
 		%col.col-lg-5
@@ -25,50 +36,31 @@
 		%tr
 			%th Latitude
 			%td= @kiosk.latitude
+		%tr
+			%th Created at
+			%td= @kiosk.created_at.strftime('%b %d, %Y')
+		%tr
+			%th Last Updated at
+			%td= @kiosk.updated_at.strftime('%b %d, %Y')
 .col-lg-12
-	.panel.panel-default
-		.panel-heading
-			Credits Bought and Sold
+	.panel.panel-default.mt20
 		.panel-body
 			#chart-container
 .col-lg-12
-	%h3 Total transactions per month
-	.table-responsive
-		%table#dataTables-example.table.table-basic.table-bordered.table-hover.mt20
-			%thead
-				%tr
-					%th Month
-					%th Credits Sold
-					%th Credits Bought
-			%tbody
-				%tr.odd.gradeX
-					%td May
-					%td 23.835
-					%td 90.234
-				%tr.even.gradeC
-					%td June
-					%td 32.142
-					%td 123.023
-.row
-.col-lg-12
-	%h3 Latest transactions
+	%h3 Latest Transactions
 	.table-responsive
 		%table#dataTables-example.table.table-basic.table-bordered.table-hover.mt20
 			%thead
 				%tr
 					%th Transaction ID
-					%th Transaction code
-					%th Transaction amount
-					%th Transaction date
+					%th Transaction Code
+					%th Transaction Amount
+					%th Transaction Date
 			%tbody
 				- @kiosk.transactions.each do |t|
 					%tr
 						%td= t.id
 						%td= t.transaction_code
 						%td= t.amount
-						%td= t.transaction_time
-%h1= "Kiosk number #{@kiosk.id}"
-
-%h3= "#{@kiosk.name} Credit Sales By Month"
-#chart-container
+						%td= t.transaction_time.strftime('%b %d, %Y')
 .row

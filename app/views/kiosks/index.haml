@@ -1,22 +1,22 @@
 .row
 .col-lg-12
-	%h1.page-header Kiosks
-.col-lg-12
-	= render 'list'
-.col-lg-12
-	.panel.panel-default
-		.panel-heading
-			Credits Sold By Kiosk
-			.pull-right
-		.panel-body
-			#chart-container
+	%h1.page-header Water Kiosks
 .col-lg-12
 	.panel.panel-default
 		.panel-heading
 			%i.fa.fa-map-marker.fa-fw
-			Kiosks
+			Map
 			.pull-right
 				.minimize.map-button
 					%i.fa.fa-minus.fa-fw
+		.panel-body#map.kiosks-map
+.col-lg-12
+	.panel.panel-default
+		.panel-heading
+			%i.fa.fa-dashboard.fa-fw
+			Chart
+			.pull-right
 		.panel-body
-			#map.kiosks-index
+			#chart-container
+.col-lg-12
+	= render 'list'

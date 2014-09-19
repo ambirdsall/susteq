@@ -1,19 +1,30 @@
 .col-lg-12
 	%h1.page-header
 		= @pump.name
-		%small - Pump
+		%small - Point
 .col-lg-12
-	%h3.pull-left General information
+	%h3.pull-left General Information
 .col-lg-6
 	%table.gen-info
 		%col.col-lg-5
 		%col.col-lg-5
 		%tr
-			%th Name
+			%th Point Name
 			%td= @pump.name
 		%tr
 			%th Location ID
 			%td= @pump.location_id
+		%tr
+			%th Status Code
+			%td
+				.pull-left
+					- case @pump.status_code
+						- when -1
+							%span.label.label-danger Danger
+						- when 0
+							%span.label.label-warning Warning
+						- when 1
+							%span.label.label-success Ok
 .col-lg-6
 	%table.gen-info
 		%col.col-lg-5
@@ -24,42 +35,31 @@
 		%tr
 			%th Latitude
 			%td= @pump.latitude
+		%tr
+			%th Created at
+			%td= @pump.created_at.strftime('%b %d, %Y')
+		%tr
+			%th Last Updated at
+			%td= @pump.updated_at.strftime('%b %d, %Y')
 .col-lg-12
 	.panel.panel-default.mt20
-		.panel-heading
 		.panel-body
 			#chart-container
-.col-lg-12
-	%h3 Total transactions per month
-	.table-responsive
-		%table#dataTables-example.table.table-basic.table-bordered.table-hover.mt20
-			%thead
-				%tr
-					%th Month
-					%th Profit
-			%tbody
-				%tr.odd.gradeX
-					%td May
-					%td $ 23.835
-				%tr.even.gradeC
-					%td June
-					%td $ 32.142
 .row
 .col-lg-12
-	%h3 Latest transactions
+	%h3 Latest Transactions
 	.table-responsive
 		%table#dataTables-example.table.table-basic.table-bordered.table-hover.mt20
 			%thead
 				%tr
 					%th Transaction ID
-					%th Transaction code
-					%th Transaction amount
-					%th Transaction date
+					%th Transaction Code
+					%th Transaction Amount
+					%th Transaction Date
 			%tbody
 				- @pump.transactions.each do |t|
 					%tr
 						%td= t.id
 						%td= t.transaction_code
 						%td= t.amount
-						%td= t.transaction_time
-.row
+						%td= t.transaction_time.strftime('%b %d, %Y')
