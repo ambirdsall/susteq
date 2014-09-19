@@ -3,9 +3,9 @@ class Admin::OperationsController < ApplicationController
 
 	def index
     @sms = sms_balance_by_pump_table
-    @total_credits_sold = credits_by_kiosk_for_all_table
+    @total_credits_sold = credits_sold_by_kiosk_table(true)
     @total_water = dispensed_by_pump_for_all_table(true)
-    @shopkeepers_credit = credits_remaining_by_kiosk_table
-    @credits_bought = credits_bought_by_kiosk(true)
+    @credits_remaining = credits_remaining_by_kiosk_table(true)
+    @credits_bought = credits_bought_by_kiosk_table(true)
   end
 end
