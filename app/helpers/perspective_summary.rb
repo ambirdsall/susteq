@@ -277,7 +277,6 @@ module PerspectiveSummary
     return nil if Transaction.all.empty?
     #Get array of all location ids
     location_ids = Transaction.all.map{|t| t.location_id}.uniq.sort
-
     #Query db for given error by location
     gprs_errors = Transaction.select("location_id, count(amount) as count").where("transaction_code=39 AND amount=101").group("location_id")
     rfid_errors = Transaction.select("location_id, count(amount) as count").where("transaction_code=39 AND amount =111").group("location_id")
@@ -291,25 +290,10 @@ module PerspectiveSummary
     stacked_data = errors_hash.map do |error_type, errors|
       error_array = location_ids.map do |location_id|
         selected_errors = errors.select{ |transaction| transaction.location_id == location_id }
-        if !selected_errors.empty?
-          {x: "location id #{location_id}", y: selected_errors.count}
-        else
-          {x:"location id #{location_id}", y:0}
-        end
+        {x: "#{location_id}", y: selected_errors.count}
       end
       {key: error_type, values: error_array}
-    end
-    # stacked_data = location_ids.map do |location_id|
-    #   error_array = errors_hash.map do |name, errors|
-    #     if error = errors.find {|object| object.location_id == location_id }
-    #       {x: name, y: error.count}
-    #     else
-    #       {x:name, y:0}
-    #     end
-    #   end
-    #   {key: "Location Id #{location_id}", values: error_array}
-    # end
-    data_to_display = {yAxisTitle: "Errors by Hub", chartData:stacked_data, chartType: "stacked"};
+    data_to_display = {yAxisTitle: "Errors by Hub", xAxisLabel:"Location Id", chartData:stacked_data, chartType: "stacked"};
   end
 
   def getHubs
