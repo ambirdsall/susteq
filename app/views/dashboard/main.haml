@@ -2,11 +2,25 @@
   %h1.page-header
     = current_provider.name
     %small - Provider
-    .panel.panel-default.mt20
-      .panel-body
-        #chart-container
 .col-lg-12
-  %h3.pull-left Water Pumps
+  .panel.panel-default
+    .panel-heading
+      %i.fa.fa-map-marker.fa-fw
+      Map
+      .pull-right
+        .minimize.map-button
+          %i.fa.fa-minus.fa-fw
+    .panel-body
+      #map
+.col-lg-12
+  .panel.panel-default
+    .panel-heading
+      %i.fa.fa-dashboard.fa-fw
+      Chart
+    .panel-body
+      #chart-container
+.col-lg-12
+  %h3.pull-left Water Points
   .pull-right
   .table-responsive
     %table.table.table-striped.table-bordered.table-hover.mt20
@@ -17,7 +31,6 @@
           %th Longitude
           %th Latitude
           %th Status code
-          %th
       %tbody
         - current_provider.pumps.each do |pump|
           %tr
@@ -25,9 +38,17 @@
             %td= link_to pump.name, pump_path(pump)
             %td= pump.longitude
             %td= pump.latitude
-            %td= pump.status_code
+            %td
+              .pull-right
+                - case pump.status_code
+                  - when -1
+                    %span.label.label-danger Danger
+                  - when 0
+                    %span.label.label-warning Warning
+                  - when 1
+                    %span.label.label-success Ok
 .col-lg-12
-  %h3.pull-left Kiosks
+  %h3.pull-left Water Kiosks
   .table-responsive
     %table.table.table-striped.table-bordered.table-hover.mt20.mb20
       %thead
@@ -37,7 +58,6 @@
           %th Longitude
           %th Latitude
           %th Status code
-          %th
       %tbody
         - current_provider.kiosks.each do |kiosk|
           %tr
@@ -45,7 +65,15 @@
             %td= link_to kiosk.name, kiosk_path(kiosk)
             %td= kiosk.longitude
             %td= kiosk.latitude
-            %td= kiosk.status_code
+            %td
+              .pull-right
+                - case kiosk.status_code
+                  - when -1
+                    %span.label.label-danger Danger
+                  - when 0
+                    %span.label.label-warning Warning
+                  - when 1
+                    %span.label.label-success Ok
 .col-lg-12
   %h3.pull-left Employees
   .pull-right
@@ -67,14 +95,3 @@
             %td
               = link_to '<i class="fa fa-trash fa-fw"></i>'.html_safe, employee_path(employee), method: :delete, data: { confirm: 'Are you sure?' }
               = link_to '<i class="fa fa-pencil fa-fw"></i>'.html_safe, edit_employee_path(employee)
-.row
-.col-lg-12
-  .panel.panel-default
-    .panel-heading
-      %i.fa.fa-map-marker.fa-fw
-      Water pumps and kiosks
-      .pull-right
-        .minimize.map-button
-          %i.fa.fa-minus.fa-fw
-    .panel-body
-      #map

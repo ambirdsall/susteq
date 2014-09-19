@@ -1,5 +1,6 @@
 class Hub < ActiveRecord::Base
   has_many :transactions
+  before_save :associate_transactions
 
   ONLY_NUMBERS = /\A[0-9]+\z/
 
@@ -25,5 +26,9 @@ class Hub < ActiveRecord::Base
   def self.get_new_hubs
     new_hubs_ids = Transaction.all.map{|transaction| transaction.location_id}.uniq - Hub.all.map{|hub| hub.location_id}.uniq
     new_hubs_ids.map{|location_id| {id: location_id, type: Hub.type_of_hub(location_id)}}
+  end
+
+  def associate_transactions
+    Transaction.all.select{|tran| tran.location_id == self.location_id}.each {|tran| self.transactions << tran}
   end
 end
