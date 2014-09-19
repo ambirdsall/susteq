@@ -3,7 +3,7 @@ $(document).ready(function(){
     var dataController = new BigData.DataController();
     dataController.getChartData(BigData.viz_data)
   }
-  if ($('#dataTables-example').length){
-    $('#dataTables-example').dataTable();
+  if ($('.dataTables-example').length){
+    $('.dataTables-example').dataTable();
   }
 })
