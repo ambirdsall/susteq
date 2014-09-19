@@ -1,5 +1,5 @@
 Admin.create!(
   name: "Susteq",
-  email: "susteq@dbc.com",
+  email: "team@susteq.nl",
   password: "welcome"
 )
