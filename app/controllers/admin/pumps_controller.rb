@@ -36,7 +36,7 @@ class Admin::PumpsController < ApplicationController
 
   def index
     @pumps = Pump.all
-    @viz_data = [dispensed_by_pump_for_all_table(false), getHubs]
+    @viz_data = [dispensed_by_pump_for_all_table(false), dispensed_by_pump_by_month, getHubs]
   end
 
   def edit

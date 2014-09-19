@@ -59,17 +59,20 @@ module PerspectiveSummary
     end
   end
 
-  #WATER KIOSKS
-  # def credits_by_kiosk_for_all #Chart
-  #   #Query for Bar Chart and Table
-  #   kiosk_totals = Transaction.select("location_id, sum(amount) as total").where("transaction_code in (20,21)").group("location_id").order("sum(amount)")
-  #   #Prepare data for Normalchart
-  #   data = kiosk_totals.map do |obj|
-  #     {label: obj.location_id.to_s, value: obj.total}
-  #   end
-  #   #Create json chart obj
-  #   data_to_display = {yAxisTitle: "Water Credits Sold (per Kiosk)", xAxisLabel:"location id", chartData: [{values: data}], chartType: "bar"};
-  # end
+  #PROVIDERS ALL
+  def credits_sold_by_provider #Chart
+    kiosk_totals = Transaction.select("location_id, sum(amount) as total").where("transaction_code in (20,21)").group("location_id").order("sum(amount)")
+    data = []
+    Provider.all.each do |provider|
+      provider_kiosks = kiosk_totals.select{|kiosk| provider.kiosks.include?(Kiosk.find_by(location_id: kiosk.location_id))}
+      total = 0
+      provider_kiosks.each do |kiosk|
+        total += kiosk.total
+      end
+      data.push({label: provider.name, value: total})
+    end
+    data_to_display = { yAxisTitle: "Credits Sold (by Kiosks of Each Provider)", xAxisLabel: "Provider", chartData: [{values:data}], chartType: "bar"};
+  end
 
   #SPECIFIC PROVIDER PAGE
   def credits_sold_by_kiosk_for_provider(provider) #Chart
@@ -79,7 +82,7 @@ module PerspectiveSummary
     kiosk_total_obj_arr.each do |obj|
       chart_data_array.push({label: obj.location_id.to_s, value:obj.total})
     end
-    data_to_display = {yAxisTitle:"Credits Sold per Kiosk (past five months)", xAxisLabel:"Location id", chartData:[{keys: "Credits sold", values: chart_data_array}], chartType:"bar"};
+    data_to_display = {yAxisTitle:"Credits Sold (per #{provider.name}'s Kiosks) ", xAxisLabel:"Location ID", chartData:[{keys: "Credits Sold", values: chart_data_array}], chartType:"bar"};
   end
 
   #SPECIFIC KIOSK PAGE
@@ -92,8 +95,9 @@ module PerspectiveSummary
         {label: getMonthName(month), value: 0}
       end
     end
-    data_to_display = {yAxisTitle: "Credits Sold (per Month)", chartData:[{key:"Credits Sold (per Month)", values:data}], chartType: "bar"};
+    data_to_display = {yAxisTitle: "Credits Sold by Kiosk #{kiosk.location_id} (per Month)", chartData:[{key:"Credits Sold (per Month)", values:data}], chartType: "bar"};
   end
+
 
 #***********************************WATER DISPENSED***************************************
   #DASHBOARD
@@ -112,6 +116,21 @@ module PerspectiveSummary
       {key: "Point Location Id #{pump_id}", values: values}
     end
     data_to_display = {yAxisTitle: "Liters Dispensed (per Month, by Point)", chartData:stacked_data, chartType: "stacked"};
+  end
+
+  #PROVIDERS ALL
+  def dispensed_by_provider #Chart
+    pump_totals = Transaction.select("location_id, sum(amount) as total").where("transaction_code = 1").group("location_id")
+    data = []
+    Provider.all.each do |provider|
+      provider_pumps = pump_totals.select{|pump| provider.pumps.include?(Pump.find_by(location_id: pump.location_id))}
+      total = 0
+      provider_pumps.each do |pump|
+        total += pump.total
+      end
+      data.push({label: provider.name, value: total})
+    end
+    data_to_display = { yAxisTitle: "Liters Dispensed (per Provider)", xAxisLabel: "Provider", chartData: [{values:data}], chartType: "bar"};
   end
 
   #WATER PUMPS for chart and OPERATIONS for table
@@ -137,7 +156,7 @@ module PerspectiveSummary
       {label: transaction.location_id.to_s, value: transaction.total}
     end
     #Create json chart obj
-    data_to_display = {yAxisTitle:"Liters Dispensed (per Point)", xAxisLabel:"Location ID", chartData: [{key:"Liters Dispensed", values:data}], chartType:"bar"};
+    data_to_display = {yAxisTitle:"Liters Dispensed (per #{provider.name}'s Points)", xAxisLabel:"Location ID", chartData: [{key:"Liters Dispensed", values:data}], chartType:"bar"};
   end
 
   #SPECIFIC PUMP PAGE
@@ -153,27 +172,31 @@ module PerspectiveSummary
       end
     end
     #Create json chart obj
-    data_to_display = { yAxisTitle: "Liters Dispensed (per Month)", chartData:[{key:"Liters Dispensed Per Month", values: data}], chartType: "bar"};
+    data_to_display = { yAxisTitle: "Liters Dispensed by Point #{pump.location_id} (per Month)", chartData:[{key:"Liters Dispensed", values: data}], chartType: "bar"};
   end
 
 #*********************************CREDITS BOUGHT & REMAINING************************
   #DASHBOARD and OPERATIONS
   def credits_bought_by_kiosk_table(table=true) #Table and Chart
     #Query db
-    credits_init = Transaction.select("location_id, sum(amount) as total").where("transaction_code = 23").group("location_id")
-    credits_other = Transaction.select("location_id, sum(amount) as total").where("transaction_code = 22 and ((starting_credits - ending_credits) < 0)").group("location_id")
+    credits_init = Transaction.select("location_id, sum(amount) as total, max(transaction_time) as date").where("transaction_code = 23").group("location_id")
+    credits_other = Transaction.select("location_id, sum(amount) as total, max(transaction_time) as date").where("transaction_code = 22 and ((starting_credits - ending_credits) < 0)").group("location_id")
     #Prepare data
     totals_hash = {}
+    date_hash = {}
     sort_by_location_id(credits_init).each do |obj|
       totals_hash[obj.location_id.to_s.to_sym] = obj.total
+      date_hash[obj.location_id.to_s.to_sym] = obj.date.strftime('%b %d, %Y')
     end
     credits_other.each do |obj|
       totals_hash[obj.location_id.to_s.to_sym] += obj.total
+      if date_hash[obj.location_id.to_s.to_sym] < obj.date
+        date_hash[obj.location_id.to_s.to_sym] = obj.date.strftime('%b %d, %Y')
+      end
     end
     data = totals_hash.map do |location_id,total|
-      {label: location_id, value: total}
+      {label: location_id, value: total, date: date_hash[location_id.to_s.to_sym]}
     end
-
     #Create json chart obj
     if table
       data
@@ -185,18 +208,23 @@ module PerspectiveSummary
   #DASHBOARD and OPERATIONS
   def credits_remaining_by_kiosk_table(table=true) #Table and Chart
     #Query db
-    credits_init = Transaction.select("location_id, sum(amount) as total").where("transaction_code = 23").group("location_id")
-    credits_subtract = Transaction.select("location_id, sum(amount) as total").where("transaction_code = 22 and ((starting_credits - ending_credits) > 0)").group("location_id")
+    credits_init = Transaction.select("location_id, sum(amount) as total, max(transaction_time) as date").where("transaction_code = 23").group("location_id")
+    credits_subtract = Transaction.select("location_id, sum(amount) as total, max(transaction_time) as date").where("transaction_code = 22 and ((starting_credits - ending_credits) > 0)").group("location_id")
     #Prepare data
     totals_hash = {}
+    date_hash = {}
     credits_init.sort_by(&:location_id).each do |obj|
       totals_hash[obj.location_id.to_s.to_sym] = obj.total
+      date_hash[obj.location_id.to_s.to_sym] = obj.date.strftime('%b %d, %Y')
     end
     credits_subtract.each do |obj|
       totals_hash[obj.location_id.to_s.to_sym] -= obj.total
+      if date_hash[obj.location_id.to_s.to_sym] < obj.date
+        date_hash[obj.location_id.to_s.to_sym] = obj.date.strftime('%b %d, %Y')
+      end
     end
     data = totals_hash.map do |location_id,total|
-     {label: location_id, value: total}
+     {label: location_id, value: total, date: date_hash[location_id.to_s.to_sym]}
     end
     #Create json chart obj
     if table

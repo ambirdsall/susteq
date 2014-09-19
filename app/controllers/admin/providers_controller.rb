@@ -6,7 +6,7 @@ class Admin::ProvidersController < ApplicationController
 
   def index
     @providers = Provider.all
-    @viz_data = [credits_sold_by_kiosk_by_month, dispensed_by_pump_by_month, getHubs]
+    @viz_data = [dispensed_by_provider, credits_sold_by_provider, getHubs]
   end
 
   def create

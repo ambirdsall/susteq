@@ -10,7 +10,7 @@ class Admin::KiosksController < ApplicationController
 
   def index
     @kiosks = Kiosk.all
-    @viz_data = [credits_sold_by_kiosk_table(false), getHubs]
+    @viz_data = [credits_sold_by_kiosk_table(false), credits_sold_by_kiosk_by_month, getHubs]
   end
 
   def show
