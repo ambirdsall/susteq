@@ -1,57 +1,72 @@
 .col-lg-12
 	%h1.page-header Operations
 .col-lg-12
-	%h3 SMS low
-	.table-responsive
-		%table.dataTables-example.table.table-striped.table-bordered.table-hover.mt20
-			%thead
-				%tr
-					%th Hub
-					%th request date
-					%th Amount
-			%tbody
-				- @sms.each do |sms|
-					%tr
-						%td= sms[:location_id]
-						%td= sms[:date]
-						%td= sms[:total]
+  %h3 Water Credits Sold by Kiosk
+  .table-responsive
+    %table.dataTables-example.table.table-striped.table-bordered.table-hover.mt20
+      %thead
+        %tr
+          %th Kiosk Location ID
+          %th Total Credits
+      %tbody
+        - @total_credits_sold.each do |kiosk|
+          %tr
+            %td= kiosk[:label]
+            %td= kiosk[:value]
 .col-lg-12
-	%h3 Credits Bought by Kiosk
-	.table-responsive
-		%table.dataTables-example.table.table-striped.table-bordered.table-hover.mt20
-			%thead
-				%tr
-					%th Kiosk Location Id
-					%th Credits bought
-			%tbody
-				- @credits_bought.each do |kiosk|
-					%tr
-						%td= kiosk[:label]
-						%td= kiosk[:value]
+  %h3 Water Liters Dispensed by Point
+  .table-responsive
+    %table.dataTables-example.table.table-striped.table-bordered.table-hover.mt20
+      %thead
+        %tr
+          %th Water Point
+          %th Total Liters
+      %tbody
+        - @total_water.each do |hub|
+          %tr
+            %td= hub[:label]
+            %td= hub[:value]
 .col-lg-12
-	%h3 Total Water Dispensed by Water Point
+  %h3 Water Credits Remaining by Kiosk
+  .table-responsive
+    %table.dataTables-example.table.table-striped.table-bordered.table-hover.mt20
+      %thead
+        %tr
+          %th Kiosk Location ID
+          %th As of
+          %th Credits
+      %tbody
+        - @credits_remaining.each do |hub|
+          %tr
+            %td= hub[:label]
+            %td= hub[:date]
+            %td= hub[:value]
+.col-lg-12
+  %h3 SMS Credits Remaining by Point
+  .table-responsive
+    %table.dataTables-example.table.table-striped.table-bordered.table-hover.mt20
+      %thead
+        %tr
+          %th Point Location ID
+          %th As of
+          %th Credits
+      %tbody
+        - @sms.each do |sms|
+          %tr
+            %td= sms[:location_id]
+            %td= sms[:date]
+            %td= sms[:total]
+.col-lg-12
+	%h3 Water Credits Bought by Kiosk
 	.table-responsive
 		%table.dataTables-example.table.table-striped.table-bordered.table-hover
 			%thead
 				%tr
-					%th Water Point
-					%th Litres
+					%th Kiosk Location ID
+					%th Last Transaction
+					%th Total Credits
 			%tbody
-				- @total_water.each do |hub|
-					%tr
-						%td= hub[:label]
-						%td= hub[:value]
-.col-lg-12
-	%h3 Shopkeepers credit
-	.table-responsive
-		%table.dataTables-example.table.table-striped.table-bordered.table-hover
-			%thead
-				%tr
-					%th Hub
-					%th Date
-					%th Credits
-			%tbody
-				- @shopkeepers_credit.each do |hub|
+				- @credits_bought.each do |hub|
 					%tr
 						%td= hub[:label]
 						%td= hub[:date]

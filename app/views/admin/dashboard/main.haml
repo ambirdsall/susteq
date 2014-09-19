@@ -1,75 +1,21 @@
 .col-lg-12
   %h1.page-header Susteq Dashboard
-  .panel.panel-default.mt20
-    .panel-heading
-    .panel-body
-      #chart-container
-.col-lg-12
-  %h3 Credits Sold by Kiosk
-  .table-responsive
-    %table.dataTables-example.table.table-striped.table-bordered.table-hover.mt20
-      %thead
-        %tr
-          %th Kiosk Location Id
-          %th Credits bought
-      %tbody
-        - @total_credits_sold.each do |kiosk|
-          %tr
-            %td= kiosk[:location_id]
-            %td= kiosk[:total]
-.col-lg-12
-  %h3 Water Dispensed by Water Point
-  .table-responsive
-    %table.dataTables-example.table.table-striped.table-bordered.table-hover.mt20
-      %thead
-        %tr
-          %th Water Point
-          %th Litres
-      %tbody
-        - @total_water.each do |hub|
-          %tr
-            %td= hub[:label]
-            %td= hub[:value]
-.col-lg-12
-  %h3 Credits Remaining by Kiosk
-  .table-responsive
-    %table.dataTables-example.table.table-striped.table-bordered.table-hover.mt20
-      %thead
-        %tr
-          %th Hub
-          %th As of
-          %th Credits
-      %tbody
-        - @credits_remaining.each do |hub|
-          %tr
-            %td= hub[:label]
-            %td= hub[:date]
-            %td= hub[:value]
-.col-lg-12
-  %h3 SMS Credits Remaining by Pump
-  .table-responsive
-    %table.dataTables-example.table.table-striped.table-bordered.table-hover.mt20
-      %thead
-        %tr
-          %th Pump
-          %th As of
-          %th Credits
-      %tbody
-        - @sms.each do |sms|
-          %tr
-            %td= sms[:location_id]
-            %td= sms[:date]
-            %td= sms[:total]
 .col-lg-12
   .panel.panel-default
     .panel-heading
       %i.fa.fa-map-marker.fa-fw
-      Water Points and Kiosks
+      Water Kiosks & Points Map
       .pull-right
         .minimize.map-button
           %i.fa.fa-minus.fa-fw
     .panel-body#map
-
+.col-lg-12
+  .panel.panel-default.mt20
+    .panel-heading
+      %i.fa.fa-dashboard.fa-fw
+      Water Kiosk & Point Charts
+    .panel-body
+      #chart-container
 - unless @new_hubs_hashes.empty?
   %h3 Hubs with the following location ids have not yet been added to the Hubs table:
   .table-responsive
