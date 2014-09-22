@@ -6,7 +6,7 @@ feature 'Provider adding an employee' do
   end
 
   scenario 'can fill out form to create a new user' do
-    click_link 'Manage Employee'
+    first(:link, 'Manage Employee').click
     click_link 'Add Employee'
     expect(current_path).to eq(new_employee_path)
     page.has_field?('email')

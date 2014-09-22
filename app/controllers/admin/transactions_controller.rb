@@ -1,4 +1,5 @@
 class Admin::TransactionsController < ApplicationController
+  before_filter :require_admin_signin
   def create
     if params[:transactions]
       params[:transactions].each do |transaction_data|

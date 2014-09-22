@@ -300,7 +300,7 @@ module PerspectiveSummary
       pumps = Pump.all
     else
       kiosks = current_provider.kiosks
-      pumps = current_provider.kiosks
+      pumps = current_provider.pumps
     end
     {chartData: {kiosks: kiosks, pumps: pumps},
                   chartType: "map" }
