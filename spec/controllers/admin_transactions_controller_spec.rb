@@ -20,6 +20,7 @@ describe Admin::TransactionsController do
     after do
       admin = @admin.destroy
     end
+    existing_transaction_time = generate_date_from_last_six_months
 
     let(:params) {{format: :json,
 
@@ -27,12 +28,17 @@ describe Admin::TransactionsController do
                   password:"123456",
 
                   transactions: [
-                    {transaction_time:generate_date_from_last_six_months,
+                    {transaction_time:existing_transaction_time,
                     transaction_code: 20,
                     location_id: 1,
                     amount: 2 },
 
                     {transaction_time:generate_date_from_last_six_months,
+                    transaction_code: 20,
+                    location_id: 1,
+                    amount:2},
+
+                    {transaction_time:existing_transaction_time,
                     transaction_code: 20,
                     location_id: 1,
                     amount:2}
@@ -78,7 +84,7 @@ describe Admin::TransactionsController do
       }.to change(Transaction, :count)
     end
 
-    it 'does not create a new transactions when unauthorized' do
+    it 'does not create new transactions when unauthorized' do
       expect{
         post :create, bad_params, headers
       }.to_not change(Transaction, :count)
@@ -89,6 +95,13 @@ describe Admin::TransactionsController do
       expect{
         post :create, params, headers
       }.to change(kiosk.transactions, :count)
+    end
+
+    it "will only new transactions and not duplicate existing transactions" do
+      kiosk = Kiosk.create(location_id:1)
+      expect{
+        post :create, params, headers
+      }.to change(kiosk.transactions, :count).by(2)
     end
   end
 end
