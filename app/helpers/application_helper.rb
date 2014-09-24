@@ -67,4 +67,9 @@ module ApplicationHelper
       redirect_to '/admin'
     end
   end
+
+  def authorize_transaction
+    admin = Admin.find_by(email: params[:email])
+    admin && admin.authenticate(params[:password]) ? true : false
+  end
 end

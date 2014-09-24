@@ -43,7 +43,7 @@ class Admin::KiosksController < ApplicationController
     @kiosk = Kiosk.find params[:id]
   end
 
-  def update #MLM NOTES TO REFACTOR - Need different way to redirect user when approach from nested provider route vs top level route
+  def update
     kiosk = Kiosk.find(params[:id])
     if params[:provider_id]
       begin
