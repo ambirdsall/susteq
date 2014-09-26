@@ -1,8 +1,11 @@
 class Admin::TransactionsController < ApplicationController
+  skip_before_filter :verify_authenticity_token, :only => [:create]
+
   def create
     if authorize_transaction
       if params[:transactions]
         params[:transactions].each do |transaction_data|
+          transaction_data[:transaction_time] = Time.zone.at(transaction_data[:transaction_time])
           if hub = Hub.find_by(location_id:transaction_data[:location_id])
             hub.transactions.create(transaction_params(transaction_data))
           else
