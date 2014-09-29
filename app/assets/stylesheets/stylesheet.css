@@ -101,3 +101,7 @@ h3 {
 .dataTables_filter label{
   float:none;
 }
+
+.triple-header{
+  height: 50px;
+}
