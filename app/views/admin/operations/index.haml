@@ -1,7 +1,8 @@
 .col-lg-12
   %h1.page-header Operations
-.col-lg-4
-  %h3 Credits Bought by Kiosk
+.col-lg-4.triple-chart-column
+  .triple-header
+    %h3 Credits Bought by Kiosk
   .table-responsive
     %table.dataTables-example.table.table-striped.table-bordered.table-hover
       %thead
@@ -15,10 +16,11 @@
             %td= hub[:label]
             %td= hub[:value]
             %td= hub[:date]
-.col-lg-4
-  %h3 Credits Sold by Kiosk
+.col-lg-4.triple-chart-column
+  .triple-header
+    %h3 Credits Sold by Kiosk
   .table-responsive
-    %table.dataTables-example.table.table-striped.table-bordered.table-hover.mt20
+    %table.dataTables-example.table.table-striped.table-bordered.table-hover
       %thead
         %tr
           %th ID
@@ -28,10 +30,11 @@
           %tr
             %td= kiosk[:label]
             %td= kiosk[:value]
-.col-lg-4
-  %h3 Credits Remaining by Kiosk
+.col-lg-4.triple-chart-column
+  .triple-header
+    %h3 Credits Remaining by Kiosk
   .table-responsive
-    %table.dataTables-example.table.table-striped.table-bordered.table-hover.mt20
+    %table.dataTables-example.table.table-striped.table-bordered.table-hover
       %thead
         %tr
           %th ID
