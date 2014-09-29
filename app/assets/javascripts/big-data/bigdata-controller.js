@@ -32,7 +32,7 @@ BigData.DataController.prototype = {
   createBarGraph: function(index, data){
     var that = this;
     that.container.append("<h3>" + data.yAxisTitle + "</h3>");
-    that.container.append(that.chartElementWriter(index))
+    that.container.append(that.chartElementWriter(index));
     data.divSelector = that.chartSelector(index);
     new HubChart.BarChart(data);
   },
@@ -48,7 +48,7 @@ BigData.DataController.prototype = {
   createMap: function(index, data){
     if ($('#map').length){
       var that = this;
-      that.createHubs(data)
+      that.createHubs(data);
       var LAT_LONG_NAIROBI = [-1.283285, 36.821657];
       that.mapView = new HubMap.View(LAT_LONG_NAIROBI[0], LAT_LONG_NAIROBI[1], 11);
       that.mapView.displayHubs({kiosks:this.kiosks, pumps:this.pumps});
@@ -65,7 +65,7 @@ BigData.DataController.prototype = {
     $.each(kioskData, function(index, kioskDatum){
       var kiosk = new BigData.Kiosk(kioskDatum);
       that.kiosks.push(kiosk);
-    })
+    });
   },
 
   parseJsonPumpData: function(pumpData){
@@ -73,6 +73,6 @@ BigData.DataController.prototype = {
     $.each(pumpData, function(index, pumpDatum){
       var pump = new BigData.Pump(pumpDatum);
       that.pumps.push(pump);
-    })
+    });
   }
 };

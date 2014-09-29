@@ -74,3 +74,30 @@ h3 {
   display: none;
   color: red;
 }
+
+.triple-chart-column .row{
+  padding:10px;
+}
+
+.triple-chart-column .dataTables_wrapper .row .col-sm-6{
+  float:none;
+  display:block;
+  width:100%;
+  min-height:40px;
+  margin:2px;
+}
+
+.triple-chart-column .label{
+  display:block;
+}
+
+.triple-chart-column .row .col-sm-6 .dataTables_paginate{
+  float:none;
+}
+.triple-chart-column .pagination{
+  display:block;
+}
+
+.dataTables_filter label{
+  float:none;
+}
