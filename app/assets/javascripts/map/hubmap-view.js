@@ -76,8 +76,8 @@ HubMap.View.prototype = {
   },
 
   showAllHubs: function(){
-    this.showPumpsLayer();
     this.showKiosksLayer();
+    this.showPumpsLayer();
   },
 
   createHubLayers: function(hubs){
