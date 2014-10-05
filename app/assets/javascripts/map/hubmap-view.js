@@ -24,9 +24,11 @@ HubMap.View.prototype = {
   createMarkers:function(hubs){
     markers = [];
     for (var i=0; i<hubs.length; i++){
-      var marker = this.createMarker(hubs[i]);
-      var popup = this.makePopUp(hubs[i]);
-      markers.push(marker.bindPopup(popup));
+      if (hubs[i].latitude && hubs[i].longitude){
+        var marker = this.createMarker(hubs[i]);
+        var popup = this.makePopUp(hubs[i]);
+        markers.push(marker.bindPopup(popup));
+      }
     }
     return markers;
   },
@@ -81,7 +83,7 @@ HubMap.View.prototype = {
   },
 
   createHubLayers: function(hubs){
-    var markers = this.createMarkers(hubs)
+    var markers = this.createMarkers(hubs);
     return L.layerGroup(markers);
   },
 

@@ -79,7 +79,7 @@
 	 */
 	var DataTable;
 
-	
+
 	/*
 	 * It is useful to have variables which are scoped locally so only the
 	 * DataTables functions can access them and they don't leak into global space.
