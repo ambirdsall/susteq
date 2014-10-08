@@ -19,6 +19,9 @@
       %h4 These unknown hubs have recorded transactions. Click to add them:
       .table-responsive
         %table.dataTables-example.table.table-striped.table-bordered.table-hover
+          %thead
+            %tr
+              %th
           %tbody
             - @new_hubs_hashes.each do |hub_hash|
               %tr
