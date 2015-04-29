@@ -1,8 +1,6 @@
 Susteq
 ======
 
-[![Build Status](https://semaphoreapp.com/api/v1/projects/1039a72e-be16-4bcf-9de2-598ebdb60d3a/255966/badge.png)](https://semaphoreapp.com/whitney/susteq--2)
-
 End-to-End Water Hub Data Management Platform for [Susteq](http://susteq.nl) in Kenya
 
 DevBootcamp Mule Deer 2014 Final Project
