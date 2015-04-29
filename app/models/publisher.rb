@@ -1,11 +1,11 @@
 require 'csv'
 require 'net/ftp'
 
-ADDR = ENV['FTP_PATH']
-USER = ENV['FTP_USER']
-PASS = ENV['FTP_PASS']
+class Publisher
+  ADDR = ENV['FTP_PATH']
+  USER = ENV['FTP_USER']
+  PASS = ENV['FTP_PASS']
 
-class WorkerScript
   def convertToCsv data
     file = "#{File.expand_path("./lib")}\/TEST.csv"
     CSV.open(file, "w") do |csv|
