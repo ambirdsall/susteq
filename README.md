@@ -1,9 +1,11 @@
 Susteq
 ======
 
+[![Build Status](https://travis-ci.org/ambirdsall/susteq.svg?branch=master)](https://travis-ci.org/ambirdsall/susteq)
+
 End-to-End Water Hub Data Management Platform for [Susteq](http://susteq.nl) in Kenya
 
-DevBootcamp Mule Deer 2014 Final Project
+This repo is a fork of the [original](https://github.com/DBC-Susteq/susteq), a final project from the 2014 Mule Deer cohort at [Dev Bootcamp](http://www.devbootcamp.com). It was written in one week, and I'm proud of that work: but I have more time and more experience now than I did then, and I intend to whip this into a cleaner, more professional, and more efficient code base. :scissors: :pencil2: :triangular_ruler: :paperclip: :thumbsup:
 
 ###An Overview
 ####The Dashboard
