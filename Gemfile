@@ -17,6 +17,10 @@ gem 'haml-rails'
 gem 'tzinfo-data', platforms: [:mingw, :mswin]
 gem 'bcrypt', '~> 3.1.7'
 
+group :development do
+  gem 'pry-rails'
+end
+
 group :development, :test do
   gem 'rspec-rails'
   gem 'factory_girl_rails'
