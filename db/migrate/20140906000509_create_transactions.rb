@@ -5,7 +5,7 @@ class CreateTransactions < ActiveRecord::Migration
       t.integer :location_id, null:false
       t.decimal :longitude, {precision: 10, scale: 6}
       t.decimal :latitude, {precision: 10, scale: 6}
-      t.integer :rfid_id
+      t.string :rfid_id
       t.integer :starting_credits
       t.integer :ending_credits
       t.integer :transaction_code, null:false

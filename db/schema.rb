@@ -11,23 +11,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140919060507) do
+ActiveRecord::Schema.define(version: 20140906000509) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "hubs", force: true do |t|
-    t.integer  "location_id",                                             null: false
+    t.string   "name"
     t.string   "type",                                                    null: false
     t.string   "provider_id"
+    t.string   "owner_phone_number"
+    t.string   "owner_sim_number"
+    t.integer  "location_id",                                             null: false
     t.decimal  "longitude",          precision: 10, scale: 6
     t.decimal  "latitude",           precision: 10, scale: 6
-    t.string   "name"
     t.integer  "status_code",                                 default: 1
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "owner_phone_number"
-    t.string   "owner_sim_number"
   end
 
   create_table "providers", force: true do |t|
