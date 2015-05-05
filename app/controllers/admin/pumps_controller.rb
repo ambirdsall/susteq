@@ -1,7 +1,7 @@
 class Admin::PumpsController < ApplicationController
   include PerspectiveSummary
   layout "admin_application"
-  before_filter :require_admin_signin
+  before_action :require_admin_signin
 
   def new
     @pump = Pump.new

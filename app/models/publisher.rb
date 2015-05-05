@@ -16,7 +16,7 @@ class Publisher
   end
 
   def writeFileToServer file
-    puts file
+    logger.info file
     Net::FTP.open(ADDR) do |ftp|
       ftp.login(USER, PASS)
       ftp.putbinaryfile(file, 'prices.csv')

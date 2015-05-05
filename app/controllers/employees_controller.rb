@@ -1,7 +1,7 @@
 class EmployeesController < ApplicationController
   layout "provider_application"
   respond_to :html
-  before_filter :require_employee_signin
+  before_action :require_employee_signin
 
   def index
     @employees = current_provider.employees.all

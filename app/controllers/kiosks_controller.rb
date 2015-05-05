@@ -1,7 +1,7 @@
 class KiosksController < ApplicationController
   include PerspectiveSummary
   layout "provider_application"
-  before_filter :require_employee_signin
+  before_action :require_employee_signin
 
   def index
     @kiosks = current_provider.kiosks

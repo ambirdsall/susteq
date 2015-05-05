@@ -2,7 +2,7 @@ class Admin::ProvidersController < ApplicationController
   layout "admin_application"
   include PerspectiveSummary
   respond_to :html
-  before_filter :require_admin_signin
+  before_action :require_admin_signin
 
   def index
     @providers = Provider.all

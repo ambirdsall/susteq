@@ -7,11 +7,11 @@ module PerspectiveSummary
   end
 
   def last_six_months
-    (Date.today.month-5..Date.today.month).to_a.join(", ")
+    (Time.zone.today.month-5..Time.zone.today.month).to_a.join(", ")
   end
 
   def last_six_months_array
-    (Date.today.month-5..Date.today.month)
+    (Time.zone.today.month-5..Time.zone.today.month)
   end
 
   def provider_kiosk_locations_id(provider)

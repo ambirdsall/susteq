@@ -1,7 +1,7 @@
 class Admin::KiosksController < ApplicationController
   include PerspectiveSummary
   layout "admin_application"
-  before_filter :require_admin_signin
+  before_action :require_admin_signin
 
   def new
     @kiosk = Kiosk.new
