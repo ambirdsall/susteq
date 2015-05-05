@@ -33,11 +33,8 @@ def hub_attributes
   }
 end
 
-def generate_date_from_last_six_months
-  year = 2014
-  month = rand(6)+4
-  day = rand(30)+1     #Pour one out for n/31/2014; no pressing reason to add in the logic.
-  DateTime.new(year, month, day)
+def generate_datetime_from_last_year
+  rand(1.year).seconds.ago
 end
 
 #For development purposes so team can easily login
@@ -90,7 +87,7 @@ Provider.all.each do |provider|
     pump = provider.pumps.create!(hub_attributes)
     5.times do
       pump.transactions.create!(
-        transaction_time: generate_date_from_last_six_months,
+        transaction_time: generate_datetime_from_last_year,
         transaction_code: 1,
         location_id: hub_location_id,
         amount: rand(1..15)
@@ -103,7 +100,7 @@ Provider.all.each do |provider|
     kiosk = provider.kiosks.create!(hub_attributes)
     5.times do
       kiosk.transactions.create!(
-        transaction_time: generate_date_from_last_six_months,
+        transaction_time: generate_datetime_from_last_year,
         transaction_code: 22,
         location_id: hub_location_id,
         amount: rand(8..20) * 10
@@ -119,7 +116,7 @@ end
 
   if transaction_code == 39 # if transaction is a sale
     Transaction.create!(
-      transaction_time: generate_date_from_last_six_months,
+      transaction_time: generate_datetime_from_last_year,
       transaction_code: transaction_code,
       location_id: location_id,
       amount: [109, 111, 132, 133].sample,
@@ -128,7 +125,7 @@ end
     )
   else
     Transaction.create!(
-      transaction_time: generate_date_from_last_six_months,
+      transaction_time: generate_datetime_from_last_year,
       transaction_code: transaction_code,
       location_id: location_id,
       amount: (50..200).to_a.sample
