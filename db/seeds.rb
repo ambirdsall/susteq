@@ -5,6 +5,14 @@ LAT_MAX = -1.219302 # North of Nairobi
 LONG_MIN = 36.636440 # West of Nairobi
 LONG_MAX = 36.959850 # East of Nairobi
 
+class HubLocationID
+  @@id = 0
+
+  def self.next
+    @@id += 1
+  end
+end
+
 def generate_random_lat_long
   lat_range = LAT_MAX - LAT_MIN
   long_range = LONG_MAX - LONG_MIN
@@ -18,7 +26,7 @@ def hub_attributes
     lat_long = generate_random_lat_long
   {
     name: Faker::Name.name,
-    location_id: hub_location_id,
+    location_id: HubLocationID.next,
     latitude: lat_long[0],
     longitude: lat_long[1],
     status_code: [-1,0,1].sample
@@ -49,8 +57,6 @@ Provider.create!(
   email: "susteq_employee@dbc.com",
   password: "asdf;lkj"
 )
-
-hub_location_id = 1
 
 5.times do
   Admin.create!(
@@ -106,219 +112,6 @@ Provider.all.each do |provider|
     hub_location_id += 1
   end
 end
-
-# TODO: DRY this repetitive nonsense up.
-
-Transaction.create!(
-  transaction_time: generate_date_from_last_six_months,
-  transaction_code: 20,
-  location_id: 1,
-  amount: 2
-)
-Transaction.create!(
-  transaction_time: generate_date_from_last_six_months,
-  transaction_code: 20,
-  location_id: 1,
-  amount: 2
-)
-Transaction.create!(
-  transaction_time: generate_date_from_last_six_months,
-  transaction_code: 20,
-  location_id: 2,
-  amount: 3
-)
-Transaction.create!(
-  transaction_time: generate_date_from_last_six_months,
-  transaction_code: 20,
-  location_id: 2,
-  amount: 4
-)
-
-# TC 23
-
-Transaction.create!(
-  transaction_time: generate_date_from_last_six_months,
-  transaction_code: 23,
-  location_id: 2,
-  amount: 3,
-  starting_credits: 5,
-  ending_credits: 10
-)
-Transaction.create!(
-  transaction_time: generate_date_from_last_six_months,
-  transaction_code: 23,
-  location_id: 2,
-  amount: 4,
-  starting_credits: 10,
-  ending_credits: 5
-)
-Transaction.create!(
-  transaction_time: generate_date_from_last_six_months,
-  transaction_code: 23,
-  location_id: 100,
-  amount: 4,
-  starting_credits: 10,
-  ending_credits: 5
-)
-Transaction.create!(
-  transaction_time: generate_date_from_last_six_months,
-  transaction_code: 23,
-  location_id: 1,
-  amount: 1,
-  starting_credits: 5,
-  ending_credits: 10
-)
-Transaction.create!(
-  transaction_time: generate_date_from_last_six_months,
-  transaction_code: 23,
-  location_id: 1,
-  amount: 1,
-  starting_credits: 5,
-  ending_credits: 10
-)
-Transaction.create!(
-  transaction_time: generate_date_from_last_six_months,
-  transaction_code: 23,
-  location_id: 2,
-  amount: 3,
-  starting_credits: 5,
-  ending_credits: 10
-)
-Transaction.create!(
-  transaction_time: generate_date_from_last_six_months,
-  transaction_code: 23,
-  location_id: 2,
-  amount: 4,
-  starting_credits: 10,
-  ending_credits: 5
-)
-Transaction.create!(
-  transaction_time: generate_date_from_last_six_months,
-  transaction_code: 23,
-  location_id: 1,
-  amount: 1,
-  starting_credits: 5,
-  ending_credits: 10
-)
-Transaction.create!(
-  transaction_time: generate_date_from_last_six_months,
-  transaction_code: 23,
-  location_id: 2,
-  amount: 3,
-  starting_credits: 5,
-  ending_credits: 10
-)
-Transaction.create!(
-  transaction_time: generate_date_from_last_six_months,
-  transaction_code: 23,
-  location_id: 2,
-  amount: 4,
-  starting_credits: 10,
-  ending_credits: 5
-)
-Transaction.create!(
-  transaction_time: generate_date_from_last_six_months,
-  transaction_code: 23,
-  location_id: 1,
-  amount: 1,
-  starting_credits: 5,
-  ending_credits: 10
-)
-Transaction.create!(
-  transaction_time: generate_date_from_last_six_months,
-  transaction_code: 23,
-  location_id: 2,
-  amount: 3,
-  starting_credits: 5,
-  ending_credits: 10
-)
-Transaction.create!(
-  transaction_time: generate_date_from_last_six_months,
-  transaction_code: 23,
-  location_id: 2,
-  amount: 4,
-  starting_credits: 10,
-  ending_credits: 5
-)
-
-# TC 1
-
-Transaction.create!(
-  transaction_time: generate_date_from_last_six_months,
-  transaction_code: 1,
-  location_id: 2,
-  amount: 3
-)
-Transaction.create!(
-  transaction_time: generate_date_from_last_six_months,
-  transaction_code: 1,
-  location_id: 2,
-  amount: 4
-)
-Transaction.create!(
-  transaction_time: generate_date_from_last_six_months,
-  transaction_code: 1,
-  location_id: 1,
-  amount: 2
-)
-Transaction.create!(
-  transaction_time: generate_date_from_last_six_months,
-  transaction_code: 1,
-  location_id: 1,
-  amount: 2
-)
-Transaction.create!(
-  transaction_time: generate_date_from_last_six_months,
-  transaction_code: 1,
-  location_id: 1,
-  amount: 2
-)
-Transaction.create!(
-  transaction_time: generate_date_from_last_six_months,
-  transaction_code: 1,
-  location_id: 1,
-  amount: 2
-)
-Transaction.create!(
-  transaction_time: generate_date_from_last_six_months,
-  transaction_code: 1,
-  location_id: 2,
-  amount: 3
-)
-Transaction.create!(
-  transaction_time: generate_date_from_last_six_months,
-  transaction_code: 1,
-  location_id: 2,
-  amount: 4
-)
-
-# TC 41
-
-Transaction.create!(
-  transaction_time: Date.new(2014,1,1),
-  transaction_code: 41,
-  location_id: 1,
-  amount: 2
-)
-Transaction.create!(
-  transaction_time: Date.new(2014,2,2),
-  transaction_code: 41,
-  location_id: 1,
-  amount: 2
-)
-Transaction.create!(
-  transaction_time: generate_date_from_last_six_months,
-  transaction_code: 41,
-  location_id: 2,
-  amount: 3
-)
-Transaction.create!(
-  transaction_time: generate_date_from_last_six_months,
-  transaction_code: 41,
-  location_id: 2,
-  amount: 4
-)
-
 
 200.times do
   transaction_code = [1, 20, 21, 22, 23, 39, 41].sample
