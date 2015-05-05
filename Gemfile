@@ -18,6 +18,8 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin]
 gem 'bcrypt', '~> 3.1.7'
 
 group :development do
+  gem 'rubocop', require: false
+  gem 'haml-lint', require: false
   gem 'pry-rails'
 end
 
