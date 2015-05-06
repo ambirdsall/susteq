@@ -10,9 +10,9 @@
 					= form_for(:session, url: employee_sessions_path) do |f|
 						%fieldset
 							.form-group
-								= f.text_field :email, :class => "form-control", placeholder: "Email", :autofocus => "", :type => "email"
+								= f.text_field :email, :class => "form-control", placeholder: "Email", :autofocus => "", :type => "email", value => "susteq_employee@dbc.com"
 							.form-group
-								= f.password_field :password, :class => "form-control", placeholder: 'Password', :type => "password", :value => ""
+								= f.password_field :password, :class => "form-control", placeholder: 'Password', :type => "password", :value => "asdf;lkj"
 							.checkbox
 								%label
 									%input{:name => "remember", :type => "checkbox", :value => "Remember Me"}
